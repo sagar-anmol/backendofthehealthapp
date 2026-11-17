@@ -1,0 +1,23 @@
+services:
+  app:
+    build: .
+    container_name: gvisor-app
+    runtime: runsc
+    ports:
+      - "8050:8080"
+    restart: always
+    environment:
+      - PORT=8080
+      - DB_PATH=/app/data/hosti.db
+      - PRIMARY_PROVIDER=mock
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GROQ_API_KEY=${GROQ_API_KEY:-}
+    volumes:
+      - hosti-data:/app/data
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+volumes:
+  hosti-data:
